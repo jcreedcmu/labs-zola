@@ -152,9 +152,14 @@ export default Component.extend(ParentMixin, ChildMixin, {
         .then((template) => {
           // replace this source's tiles
           const map = this.get('mainMap.mapInstance');
-          const newStyle = map.getStyle();
-          newStyle.sources[sourceId].tiles = [template];
-          map.setStyle(newStyle);
+
+          if (map) {
+            const newStyle = map.getStyle();
+            newStyle.sources[sourceId].tiles = [template];
+            map.setStyle(newStyle);
+          } else {
+            throw new Error('Attempted to load vector tile source, but the map is not initialized yet');
+          }
         });
     },
     updatePaintFor(layerId, newPaintStyle) {
